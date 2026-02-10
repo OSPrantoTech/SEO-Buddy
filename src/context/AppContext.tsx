@@ -6,7 +6,10 @@
  */
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { UserMode, Project, Client, LearningModule, SEOHistoryEntry } from '../types';
+import type { Project, Client, LearningModule, SEOHistoryEntry } from '../types';
+
+// Local UserMode type - only beginner and pro
+type UserMode = 'beginner' | 'pro';
 
 interface AppState {
   // User Mode

@@ -3,162 +3,256 @@
  * SIDEBAR COMPONENT
  * ============================================
  * Navigation sidebar with all the tool options.
- * Collapses on mobile and shows as a slide-out menu.
- * Filters navigation items based on current mode.
+ * All features are FREE - no mode restrictions.
  */
 
-import { Search, Sparkles, Hash, Zap, BookOpen, Home, Code2, FolderOpen, GraduationCap, Settings, Users, FileText, DollarSign, FileBarChart } from 'lucide-react';
+import { 
+  Search, Sparkles, Hash, Zap, BookOpen, Home, Code2, FolderOpen, 
+  GraduationCap, FileText, DollarSign, FileBarChart, Link, Eye,
+  FileCode, Bot, Map, BarChart3, Tag, BookOpenCheck, Image, RefreshCw,
+  FileEdit, Languages, CheckSquare, Target, QrCode, Clock, Braces
+} from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { useApp } from '../../context/AppContext';
 
-// Define which features are available in which mode
-const modeFeatures = {
-  beginner: ['home', 'seo-checker', 'ai-generator', 'keywords', 'learning', 'learn', 'about', 'mode', 'developer'],
-  pro: ['home', 'seo-checker', 'ai-generator', 'keywords', 'performance', 'learning', 'learn', 'projects', 'reports', 'about', 'mode', 'developer'],
-  agency: ['home', 'seo-checker', 'ai-generator', 'keywords', 'performance', 'learning', 'learn', 'projects', 'reports', 'clients', 'proposals', 'pricing', 'about', 'mode', 'developer']
-};
-
-// All navigation items
+// All navigation items - ALL FREE
 const allNavItems = [
   // Main Tools
   {
     id: 'home',
     label: 'Dashboard',
     icon: Home,
-    tooltip: 'Overview of all your SEO tools',
     color: 'text-blue-500',
-    section: 'main',
-    badge: null
+    section: 'main'
   },
   {
     id: 'seo-checker',
     label: 'SEO Checker',
     icon: Search,
-    tooltip: 'Analyze your page\'s SEO and get a score',
     color: 'text-indigo-500',
-    section: 'main',
-    badge: null
+    section: 'main'
   },
   {
     id: 'ai-generator',
     label: 'AI Generator',
     icon: Sparkles,
-    tooltip: 'Generate SEO-optimized titles and descriptions',
     color: 'text-purple-500',
-    section: 'main',
-    badge: 'AI'
+    section: 'main'
   },
   {
     id: 'keywords',
     label: 'Keywords',
     icon: Hash,
-    tooltip: 'Find the best keywords for your content',
     color: 'text-green-500',
-    section: 'main',
-    badge: null
+    section: 'main'
   },
   {
     id: 'performance',
     label: 'Speed Check',
     icon: Zap,
-    tooltip: 'Check page speed and mobile-friendliness',
     color: 'text-orange-500',
-    section: 'main',
-    badge: 'Pro'
+    section: 'main'
   },
-  // Learning & Growth
+  // SEO Tools
+  {
+    id: 'backlinks',
+    label: 'Backlinks',
+    icon: Link,
+    color: 'text-pink-500',
+    section: 'seo'
+  },
+  {
+    id: 'serp-preview',
+    label: 'SERP Preview',
+    icon: Eye,
+    color: 'text-cyan-500',
+    section: 'seo'
+  },
+  {
+    id: 'meta-tags',
+    label: 'Meta Tags',
+    icon: Tag,
+    color: 'text-violet-500',
+    section: 'seo'
+  },
+  {
+    id: 'social-preview',
+    label: 'Social Preview',
+    icon: Eye,
+    color: 'text-blue-500',
+    section: 'seo'
+  },
+  {
+    id: 'schema',
+    label: 'Schema Generator',
+    icon: FileCode,
+    color: 'text-emerald-500',
+    section: 'seo'
+  },
+  {
+    id: 'robots',
+    label: 'Robots.txt',
+    icon: Bot,
+    color: 'text-gray-500',
+    section: 'seo'
+  },
+  {
+    id: 'sitemap',
+    label: 'Sitemap',
+    icon: Map,
+    color: 'text-teal-500',
+    section: 'seo'
+  },
+  {
+    id: 'headings',
+    label: 'Headings',
+    icon: BarChart3,
+    color: 'text-amber-500',
+    section: 'seo'
+  },
+  // Content Tools
+  {
+    id: 'word-counter',
+    label: 'Word Counter',
+    icon: FileEdit,
+    color: 'text-cyan-500',
+    section: 'content'
+  },
+  {
+    id: 'keyword-density',
+    label: 'Keyword Density',
+    icon: Hash,
+    color: 'text-rose-500',
+    section: 'content'
+  },
+  {
+    id: 'readability',
+    label: 'Readability',
+    icon: BookOpenCheck,
+    color: 'text-indigo-500',
+    section: 'content'
+  },
+  {
+    id: 'image-seo',
+    label: 'Image SEO',
+    icon: Image,
+    color: 'text-purple-500',
+    section: 'content'
+  },
+  {
+    id: 'redirect-checker',
+    label: 'Redirect Checker',
+    icon: RefreshCw,
+    color: 'text-orange-500',
+    section: 'content'
+  },
+  // Advanced SEO
+  {
+    id: 'canonical',
+    label: 'Canonical URL',
+    icon: Link,
+    color: 'text-indigo-500',
+    section: 'advanced'
+  },
+  {
+    id: 'hreflang',
+    label: 'Hreflang Tags',
+    icon: Languages,
+    color: 'text-teal-500',
+    section: 'advanced'
+  },
+  {
+    id: 'domain-age',
+    label: 'Domain Age',
+    icon: Clock,
+    color: 'text-amber-500',
+    section: 'advanced'
+  },
+  {
+    id: 'seo-checklist',
+    label: 'SEO Checklist',
+    icon: CheckSquare,
+    color: 'text-green-500',
+    section: 'advanced'
+  },
+  {
+    id: 'longtail-keywords',
+    label: 'Long-tail Keywords',
+    icon: Target,
+    color: 'text-violet-500',
+    section: 'advanced'
+  },
+  {
+    id: 'qr-generator',
+    label: 'QR Code',
+    icon: QrCode,
+    color: 'text-gray-500',
+    section: 'advanced'
+  },
+  {
+    id: 'json-creator',
+    label: 'JSON Creator',
+    icon: Braces,
+    color: 'text-yellow-500',
+    section: 'advanced'
+  },
+  // Learning
   {
     id: 'learning',
     label: 'Learn SEO',
     icon: GraduationCap,
-    tooltip: 'Complete SEO learning roadmap',
     color: 'text-pink-500',
-    section: 'learn',
-    badge: null
+    section: 'learn'
   },
   {
     id: 'learn',
     label: 'Quick Guides',
     icon: BookOpen,
-    tooltip: 'Quick SEO reference guides',
     color: 'text-rose-500',
-    section: 'learn',
-    badge: null
+    section: 'learn'
   },
-  // Pro Features
+  // Business
   {
     id: 'projects',
     label: 'Projects',
     icon: FolderOpen,
-    tooltip: 'Manage your SEO projects',
     color: 'text-cyan-500',
-    section: 'pro',
-    badge: 'Pro'
+    section: 'business'
   },
   {
     id: 'reports',
     label: 'Reports',
     icon: FileBarChart,
-    tooltip: 'Generate SEO audit reports',
     color: 'text-teal-500',
-    section: 'pro',
-    badge: 'Pro'
-  },
-  // Agency Features
-  {
-    id: 'clients',
-    label: 'Clients',
-    icon: Users,
-    tooltip: 'Manage your clients',
-    color: 'text-amber-500',
-    section: 'agency',
-    badge: 'Agency'
+    section: 'business'
   },
   {
     id: 'proposals',
     label: 'Proposals',
     icon: FileText,
-    tooltip: 'Create SEO service proposals',
     color: 'text-emerald-500',
-    section: 'agency',
-    badge: 'Agency'
+    section: 'business'
   },
   {
     id: 'pricing',
     label: 'Pricing',
     icon: DollarSign,
-    tooltip: 'SEO service pricing calculator',
     color: 'text-yellow-500',
-    section: 'agency',
-    badge: 'Agency'
+    section: 'business'
   },
-  // Settings & Info
+  // Settings
   {
     id: 'about',
     label: 'About Platform',
     icon: BookOpen,
-    tooltip: 'Learn about SEO Buddy platform',
     color: 'text-blue-500',
-    section: 'settings',
-    badge: null
-  },
-  {
-    id: 'mode',
-    label: 'Mode Settings',
-    icon: Settings,
-    tooltip: 'Switch between Beginner/Pro/Agency mode',
-    color: 'text-gray-500',
-    section: 'settings',
-    badge: null
+    section: 'settings'
   },
   {
     id: 'developer',
     label: 'Developer',
     icon: Code2,
-    tooltip: 'About the developer',
     color: 'text-cyan-500',
-    section: 'settings',
-    badge: 'Info'
+    section: 'settings'
   }
 ];
 
@@ -170,52 +264,51 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }: SidebarProps) {
-  const { userMode } = useApp();
-  
-  // Filter navigation items based on current mode
-  const availableFeatures = modeFeatures[userMode as keyof typeof modeFeatures] || modeFeatures.beginner;
-  const navItems = allNavItems.filter(item => availableFeatures.includes(item.id));
-
   const handleNavClick = (id: string) => {
     onTabChange(id);
     onMobileClose();
   };
 
-  // Get badge color based on badge type
-  const getBadgeStyles = (badge: string | null) => {
-    switch (badge) {
-      case 'AI':
-        return 'bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300';
-      case 'Pro':
-        return 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300';
-      case 'Agency':
-        return 'bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300';
-      case 'Info':
-        return 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-300';
-      default:
-        return '';
-    }
-  };
+  const renderSection = (sectionId: string, title: string) => {
+    const items = allNavItems.filter(item => item.section === sectionId);
+    if (items.length === 0) return null;
 
-  // Get mode label for display
-  const getModeLabel = (): { text: string; color: string } => {
-    switch (userMode) {
-      case 'beginner':
-        return { text: 'Beginner', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' };
-      case 'pro':
-        return { text: 'Pro', color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300' };
-      case 'agency':
-        return { text: 'Agency', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' };
-      default:
-        return { text: 'Beginner', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' };
-    }
-  };
+    return (
+      <>
+        <div className="mt-4 mb-2 first:mt-0">
+          <span className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+            {title}
+          </span>
+        </div>
+        
+        {items.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
 
-  const modeLabel = getModeLabel();
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              className={cn(
+                'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200',
+                'text-left font-medium text-sm',
+                isActive
+                  ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+              )}
+            >
+              <Icon className={cn('w-4 h-4 flex-shrink-0', isActive ? item.color : '')} />
+              <span className="truncate">{item.label}</span>
+            </button>
+          );
+        })}
+      </>
+    );
+  };
 
   return (
     <>
-      {/* Mobile overlay - blocks background interaction */}
+      {/* Mobile overlay */}
       {isMobileOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 lg:hidden touch-none"
@@ -227,7 +320,7 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-64 z-50',
+          'fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-56 z-50',
           'bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700',
           'transform transition-transform duration-300 ease-in-out',
           'lg:translate-x-0 flex-shrink-0',
@@ -235,194 +328,25 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="p-4 space-y-1 h-full overflow-y-auto pb-40 overscroll-contain">
-          {/* Current Mode Badge */}
-          <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 dark:text-gray-400">Current Mode</span>
-              <span className={cn('px-2 py-1 text-xs font-medium rounded-full', modeLabel.color)}>
-                {modeLabel.text}
-              </span>
+        <nav className="p-3 space-y-0.5 h-full overflow-y-auto pb-40 overscroll-contain">
+          {/* All Features Free Badge */}
+          <div className="mb-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200 dark:border-green-800">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">🎉</span>
+              <div>
+                <div className="text-xs font-semibold text-green-700 dark:text-green-300">All Features FREE</div>
+                <div className="text-xs text-green-600 dark:text-green-400">35+ SEO Tools</div>
+              </div>
             </div>
           </div>
 
-          {/* Section: Main Tools */}
-          <div className="mb-2">
-            <span className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-              Main Tools
-            </span>
-          </div>
-          
-          {navItems.filter(item => item.section === 'main').map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={cn(
-                  'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                  'text-left font-medium',
-                  isActive
-                    ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                )}
-              >
-                <Icon className={cn('w-5 h-5 flex-shrink-0', isActive ? item.color : '')} />
-                <span className="truncate">{item.label}</span>
-                {item.badge && (
-                  <span className={cn('ml-auto px-2 py-0.5 text-xs rounded-full flex-shrink-0', getBadgeStyles(item.badge))}>
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-
-          {/* Section: Learning */}
-          <div className="mt-4 mb-2">
-            <span className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-              Learning
-            </span>
-          </div>
-          
-          {navItems.filter(item => item.section === 'learn').map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={cn(
-                  'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                  'text-left font-medium',
-                  isActive
-                    ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                )}
-              >
-                <Icon className={cn('w-5 h-5 flex-shrink-0', isActive ? item.color : '')} />
-                <span className="truncate">{item.label}</span>
-                {item.badge && (
-                  <span className={cn('ml-auto px-2 py-0.5 text-xs rounded-full flex-shrink-0', getBadgeStyles(item.badge))}>
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-
-          {/* Section: Pro Features (only show if there are pro items) */}
-          {navItems.filter(item => item.section === 'pro').length > 0 && (
-            <>
-              <div className="mt-4 mb-2">
-                <span className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                  Pro Features
-                </span>
-              </div>
-              
-              {navItems.filter(item => item.section === 'pro').map((item) => {
-                const Icon = item.icon;
-                const isActive = activeTab === item.id;
-
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={cn(
-                      'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                      'text-left font-medium',
-                      isActive
-                        ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                    )}
-                  >
-                    <Icon className={cn('w-5 h-5 flex-shrink-0', isActive ? item.color : '')} />
-                    <span className="truncate">{item.label}</span>
-                    {item.badge && (
-                      <span className={cn('ml-auto px-2 py-0.5 text-xs rounded-full flex-shrink-0', getBadgeStyles(item.badge))}>
-                        {item.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </>
-          )}
-
-          {/* Section: Agency Features (only show if there are agency items) */}
-          {navItems.filter(item => item.section === 'agency').length > 0 && (
-            <>
-              <div className="mt-4 mb-2">
-                <span className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                  Agency Tools
-                </span>
-              </div>
-              
-              {navItems.filter(item => item.section === 'agency').map((item) => {
-                const Icon = item.icon;
-                const isActive = activeTab === item.id;
-
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={cn(
-                      'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                      'text-left font-medium',
-                      isActive
-                        ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                    )}
-                  >
-                    <Icon className={cn('w-5 h-5 flex-shrink-0', isActive ? item.color : '')} />
-                    <span className="truncate">{item.label}</span>
-                    {item.badge && (
-                      <span className={cn('ml-auto px-2 py-0.5 text-xs rounded-full flex-shrink-0', getBadgeStyles(item.badge))}>
-                        {item.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </>
-          )}
-
-          {/* Section: Settings */}
-          <div className="mt-4 mb-2">
-            <span className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-              Settings
-            </span>
-          </div>
-          
-          {navItems.filter(item => item.section === 'settings').map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={cn(
-                  'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                  'text-left font-medium',
-                  isActive
-                    ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                )}
-              >
-                <Icon className={cn('w-5 h-5 flex-shrink-0', isActive ? item.color : '')} />
-                <span className="truncate">{item.label}</span>
-                {item.badge && (
-                  <span className={cn('ml-auto px-2 py-0.5 text-xs rounded-full flex-shrink-0', getBadgeStyles(item.badge))}>
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          {renderSection('main', 'Main Tools')}
+          {renderSection('seo', 'SEO Tools')}
+          {renderSection('content', 'Content Tools')}
+          {renderSection('advanced', 'Advanced SEO')}
+          {renderSection('learn', 'Learning')}
+          {renderSection('business', 'Business')}
+          {renderSection('settings', 'Settings')}
         </nav>
       </aside>
     </>

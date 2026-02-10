@@ -4,20 +4,9 @@
  * ============================================
  * 
  * Welcome to SEO Buddy! This is the main entry point of the application.
+ * All 20+ SEO tools are FREE!
  * 
- * STRUCTURE:
- * - ThemeProvider: Manages light/dark mode
- * - Header: Top navigation with logo and theme toggle
- * - Sidebar: Navigation menu for different tools
- * - Main Content: Displays the active tool
- * - Footer: Branding and contact information
- * 
- * HOW TO ADD NEW TOOLS:
- * 1. Create a new component in src/components/features/
- * 2. Add it to the navItems in Sidebar.tsx
- * 3. Add it to the renderContent() function below
- * 
- * Created by Obaida Siddque Prant (OSPranto Tech)
+ * Created by Obaida Siddque Pranto (OSPranto Tech)
  */
 
 import { useState, useEffect } from 'react';
@@ -27,6 +16,8 @@ import { AppProvider } from './context/AppContext';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { Footer } from './components/layout/Footer';
+
+// Feature Components
 import Dashboard from './components/features/Dashboard';
 import PowerfulSEOChecker from './components/features/PowerfulSEOChecker';
 import { AIContentGenerator } from './components/features/AIContentGenerator';
@@ -36,22 +27,47 @@ import { LearnSEO } from './components/features/LearnSEO';
 import { Developer } from './components/features/Developer';
 import { LearningCenter } from './components/features/LearningCenter';
 import { ProjectManager } from './components/features/ProjectManager';
-import { ModeSelector } from './components/features/ModeSelector';
 import AboutPlatform from './components/features/AboutPlatform';
 
+// SEO Tools
+import { BacklinkChecker } from './components/features/BacklinkChecker';
+import { SERPPreview } from './components/features/SERPPreview';
+import { SchemaGenerator } from './components/features/SchemaGenerator';
+import { RobotsTxtGenerator } from './components/features/RobotsTxtGenerator';
+import { SitemapGenerator } from './components/features/SitemapGenerator';
+import { HeadingAnalyzer } from './components/features/HeadingAnalyzer';
+
+// New SEO Tools
+import { MetaTagsGenerator } from './components/features/MetaTagsGenerator';
+import { SocialPreview } from './components/features/SocialPreview';
+import { KeywordDensity } from './components/features/KeywordDensity';
+import { ReadabilityChecker } from './components/features/ReadabilityChecker';
+import { ImageSEO } from './components/features/ImageSEO';
+import { RedirectChecker } from './components/features/RedirectChecker';
+
+// Advanced SEO Tools
+import { WordCounter } from './components/features/WordCounter';
+import { CanonicalGenerator } from './components/features/CanonicalGenerator';
+import { HreflangGenerator } from './components/features/HreflangGenerator';
+import { DomainAgeChecker } from './components/features/DomainAgeChecker';
+import { SEOAuditChecklist } from './components/features/SEOAuditChecklist';
+import { LongTailKeywords } from './components/features/LongTailKeywords';
+import { QRCodeGenerator } from './components/features/QRCodeGenerator';
+import { JsonCreator } from './components/features/JsonCreator';
+
+// Business Tools
+import { ReportGenerator } from './components/features/ReportGenerator';
+import { ProposalGenerator } from './components/features/ProposalGenerator';
+import { PricingCalculator } from './components/features/PricingCalculator';
+
 export function App() {
-  // Track which tool is currently active
   const [activeTab, setActiveTab] = useState('home');
-  
-  // Track if mobile menu is open
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Close mobile menu
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
@@ -61,28 +77,24 @@ export function App() {
     const scrollY = window.scrollY;
     
     if (isMobileMenuOpen) {
-      // Store current scroll position and lock body
       document.documentElement.classList.add('menu-open');
       document.body.classList.add('menu-open');
       document.body.style.top = `-${scrollY}px`;
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
     } else {
-      // Restore scroll position and unlock body
       document.documentElement.classList.remove('menu-open');
       document.body.classList.remove('menu-open');
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
       
-      // Restore scroll position
       const storedScrollY = parseInt(document.body.style.top || '0') * -1;
       if (storedScrollY > 0) {
         window.scrollTo(0, storedScrollY);
       }
     }
 
-    // Cleanup on unmount
     return () => {
       document.documentElement.classList.remove('menu-open');
       document.body.classList.remove('menu-open');
@@ -92,21 +104,14 @@ export function App() {
     };
   }, [isMobileMenuOpen]);
 
-  // Change active tab
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     closeMobileMenu();
   };
 
-  /**
-   * Renders the content based on active tab
-   * 
-   * TO ADD A NEW TOOL:
-   * 1. Import your component at the top
-   * 2. Add a new case here with your tool's ID
-   */
   const renderContent = () => {
     switch (activeTab) {
+      // Main Tools
       case 'home':
         return <Dashboard onNavigate={handleTabChange} />;
       case 'seo-checker':
@@ -117,18 +122,75 @@ export function App() {
         return <KeywordTool />;
       case 'performance':
         return <PerformanceCheck />;
+      
+      // SEO Tools
+      case 'backlinks':
+        return <BacklinkChecker />;
+      case 'serp-preview':
+        return <SERPPreview />;
+      case 'meta-tags':
+        return <MetaTagsGenerator />;
+      case 'social-preview':
+        return <SocialPreview />;
+      case 'schema':
+        return <SchemaGenerator />;
+      case 'robots':
+        return <RobotsTxtGenerator />;
+      case 'sitemap':
+        return <SitemapGenerator />;
+      case 'headings':
+        return <HeadingAnalyzer />;
+      
+      // Content Tools
+      case 'word-counter':
+        return <WordCounter />;
+      case 'keyword-density':
+        return <KeywordDensity />;
+      case 'readability':
+        return <ReadabilityChecker />;
+      case 'image-seo':
+        return <ImageSEO />;
+      case 'redirect-checker':
+        return <RedirectChecker />;
+      
+      // Advanced SEO
+      case 'canonical':
+        return <CanonicalGenerator />;
+      case 'hreflang':
+        return <HreflangGenerator />;
+      case 'domain-age':
+        return <DomainAgeChecker />;
+      case 'seo-checklist':
+        return <SEOAuditChecklist />;
+      case 'longtail-keywords':
+        return <LongTailKeywords />;
+      case 'qr-generator':
+        return <QRCodeGenerator />;
+      case 'json-creator':
+        return <JsonCreator />;
+      
+      // Learning
       case 'learn':
         return <LearnSEO />;
       case 'learning':
         return <LearningCenter />;
+      
+      // Business
       case 'projects':
         return <ProjectManager />;
-      case 'mode':
-        return <ModeSelector onModeChange={() => handleTabChange('home')} />;
+      case 'reports':
+        return <ReportGenerator />;
+      case 'proposals':
+        return <ProposalGenerator />;
+      case 'pricing':
+        return <PricingCalculator />;
+      
+      // Settings
       case 'about':
         return <AboutPlatform onNavigate={handleTabChange} />;
       case 'developer':
         return <Developer />;
+      
       default:
         return <Dashboard onNavigate={handleTabChange} />;
     }
@@ -137,44 +199,36 @@ export function App() {
   return (
     <ThemeProvider>
       <AppProvider>
-      {/* Toast notifications for feedback */}
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          className: 'dark:bg-gray-800 dark:text-white',
-          duration: 3000,
-        }}
-      />
-
-      {/* Main app container */}
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-        {/* Header - always visible at top */}
-        <Header 
-          onMenuToggle={toggleMobileMenu} 
-          isMobileMenuOpen={isMobileMenuOpen}
+        <Toaster 
+          position="top-right"
+          toastOptions={{
+            className: 'dark:bg-gray-800 dark:text-white',
+            duration: 3000,
+          }}
         />
 
-        {/* Main layout with sidebar and content */}
-        <div className="flex min-h-[calc(100vh-4rem)]">
-          {/* Sidebar navigation */}
-          <Sidebar
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            isMobileOpen={isMobileMenuOpen}
-            onMobileClose={closeMobileMenu}
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+          <Header 
+            onMenuToggle={toggleMobileMenu} 
+            isMobileMenuOpen={isMobileMenuOpen}
           />
 
-          {/* Main content area */}
-          <main className="flex-1 w-full min-w-0 flex flex-col">
-            <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-              {renderContent()}
-            </div>
+          <div className="flex min-h-[calc(100vh-4rem)]">
+            <Sidebar
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              isMobileOpen={isMobileMenuOpen}
+              onMobileClose={closeMobileMenu}
+            />
 
-            {/* Footer */}
-            <Footer />
-          </main>
+            <main className="flex-1 w-full min-w-0 flex flex-col">
+              <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+                {renderContent()}
+              </div>
+              <Footer />
+            </main>
+          </div>
         </div>
-      </div>
       </AppProvider>
     </ThemeProvider>
   );

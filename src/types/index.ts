@@ -9,7 +9,7 @@
 // USER & MODE TYPES
 // ===========================================
 
-export type UserMode = 'beginner' | 'pro' | 'agency';
+export type UserMode = 'beginner' | 'pro';
 
 export interface UserProfile {
   id: string;

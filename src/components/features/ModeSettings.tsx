@@ -29,13 +29,6 @@ export function ModeSettings() {
       color: 'text-indigo-600 dark:text-indigo-400',
       bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
       borderColor: 'border-indigo-500'
-    },
-    {
-      key: 'agency',
-      icon: '🏢',
-      color: 'text-amber-600 dark:text-amber-400',
-      bgColor: 'bg-amber-50 dark:bg-amber-900/20',
-      borderColor: 'border-amber-500'
     }
   ];
 
@@ -165,7 +158,6 @@ export function ModeSettings() {
                 <th className="text-left py-3 px-4 text-gray-600 dark:text-gray-400">Feature</th>
                 <th className="text-center py-3 px-4 text-green-600">🌱 Beginner</th>
                 <th className="text-center py-3 px-4 text-indigo-600">⚡ Pro</th>
-                <th className="text-center py-3 px-4 text-amber-600">🏢 Agency</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -173,11 +165,9 @@ export function ModeSettings() {
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">SEO Checker</td>
                 <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
-                <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">AI Generator</td>
-                <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
               </tr>
@@ -185,11 +175,9 @@ export function ModeSettings() {
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Keyword Research</td>
                 <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
-                <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Learning Roadmap</td>
-                <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
               </tr>
@@ -197,35 +185,29 @@ export function ModeSettings() {
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Speed Check</td>
                 <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">✅</td>
-                <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Project Management</td>
                 <td className="text-center py-3 px-4">❌</td>
-                <td className="text-center py-3 px-4">✅</td>
                 <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Report Generation</td>
                 <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">✅</td>
-                <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Client Management</td>
-                <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Proposal Generator</td>
                 <td className="text-center py-3 px-4">❌</td>
-                <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">✅</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Pricing Calculator</td>
-                <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">❌</td>
                 <td className="text-center py-3 px-4">✅</td>
               </tr>
@@ -244,10 +226,7 @@ export function ModeSettings() {
             <strong>🌱 Beginner:</strong> You're new to SEO and want to learn the basics
           </li>
           <li>
-            <strong>⚡ Pro:</strong> You understand SEO and want to work on your own projects
-          </li>
-          <li>
-            <strong>🏢 Agency:</strong> You do SEO for clients and need full business tools
+            <strong>⚡ Pro:</strong> You're ready for all professional SEO tools including client management
           </li>
         </ul>
       </Card>

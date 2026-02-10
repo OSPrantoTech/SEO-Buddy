@@ -9,7 +9,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Define the available modes
-export type AppMode = 'beginner' | 'pro' | 'agency';
+export type AppMode = 'beginner' | 'pro';
 
 // Mode configuration with features and descriptions
 export const modeConfig = {
@@ -36,7 +36,7 @@ export const modeConfig = {
   },
   pro: {
     name: 'Pro',
-    description: 'For professional SEO work',
+    description: 'All features for professionals',
     icon: '⚡',
     color: 'indigo',
     features: [
@@ -44,26 +44,10 @@ export const modeConfig = {
       'Speed & Performance Check',
       'Project Management',
       'SEO Audit Reports',
-      'Advanced Analysis'
-    ],
-    lockedFeatures: [
-      'Client Management',
-      'Proposal Generator',
-      'Pricing Calculator'
-    ]
-  },
-  agency: {
-    name: 'Agency',
-    description: 'Full agency toolkit',
-    icon: '🏢',
-    color: 'amber',
-    features: [
-      'All Pro Features',
       'Client Management',
       'Proposal Generator',
       'Pricing Calculator',
-      'Team Collaboration',
-      'White-label Reports'
+      'Full SEO Toolkit'
     ],
     lockedFeatures: []
   }
@@ -86,7 +70,7 @@ export function ModeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<AppMode>(() => {
     if (typeof window !== 'undefined') {
       const savedMode = localStorage.getItem('seo-buddy-mode');
-      if (savedMode && ['beginner', 'pro', 'agency'].includes(savedMode)) {
+      if (savedMode && ['beginner', 'pro'].includes(savedMode)) {
         return savedMode as AppMode;
       }
     }

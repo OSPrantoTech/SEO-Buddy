@@ -6,7 +6,7 @@
  */
 
 import { useState } from 'react';
-import { Sparkles, Rocket, Building2, Check, Lock, ChevronDown } from 'lucide-react';
+import { Sparkles, Rocket, Check, Lock, ChevronDown } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import type { UserMode } from '../../types';
 
@@ -21,41 +21,29 @@ const modes = [
       'Essential SEO tools only',
       'Simple language explanations',
       'Step-by-step guidance',
-      'Learning resources'
+      'Learning resources',
+      'AI content generator',
+      'Keyword research'
     ],
     badge: 'Free'
   },
   {
     id: 'pro' as UserMode,
     name: 'Pro Mode',
-    description: 'Advanced tools for professionals',
+    description: 'All features for professionals',
     icon: Rocket,
     color: 'from-indigo-500 to-purple-500',
     features: [
       'All Beginner features',
-      'Advanced SEO analysis',
-      'AI content generation',
-      'Competitor analysis',
-      'SEO roadmap generator',
-      'Client reports'
+      'Speed & Performance check',
+      'Project management',
+      'Client management',
+      'Proposal generator',
+      'Pricing calculator',
+      'Report generation',
+      'Full SEO toolkit'
     ],
     badge: 'Pro'
-  },
-  {
-    id: 'agency' as UserMode,
-    name: 'Agency Mode',
-    description: 'Multi-client & team management',
-    icon: Building2,
-    color: 'from-orange-500 to-red-500',
-    features: [
-      'All Pro features',
-      'Client management',
-      'Multiple projects',
-      'White-label reports',
-      'Proposal generator',
-      'Team collaboration'
-    ],
-    badge: 'Agency'
   }
 ];
 

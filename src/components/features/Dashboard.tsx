@@ -5,124 +5,88 @@
  */
 
 import React from 'react';
-import { useApp } from '../../context/AppContext';
 
 interface DashboardProps {
   onNavigate: (page: string) => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
-  const { userMode } = useApp();
 
-  // Quick action cards based on mode
-  const getQuickActions = () => {
-    const baseActions = [
-      {
-        id: 'seo-checker',
-        icon: '🔍',
-        title: 'SEO Analyzer',
-        subtitle: 'Scan any website',
-        color: 'from-blue-500 to-blue-600',
-        page: 'seo-checker'
-      },
-      {
-        id: 'ai-generator',
-        icon: '✨',
-        title: 'AI Writer',
-        subtitle: 'Generate content',
-        color: 'from-purple-500 to-purple-600',
-        page: 'ai-generator'
-      },
-      {
-        id: 'keywords',
-        icon: '🎯',
-        title: 'Keywords',
-        subtitle: 'Find opportunities',
-        color: 'from-green-500 to-green-600',
-        page: 'keywords'
-      },
-      {
-        id: 'learn',
-        icon: '📚',
-        title: 'Learn SEO',
-        subtitle: 'Master the basics',
-        color: 'from-orange-500 to-orange-600',
-        page: 'learn'
-      }
-    ];
-
-    if (userMode === 'pro' || userMode === 'agency') {
-      baseActions.push(
-        {
-          id: 'speed',
-          icon: '⚡',
-          title: 'Speed Test',
-          subtitle: 'Check performance',
-          color: 'from-yellow-500 to-yellow-600',
-          page: 'speed'
-        },
-        {
-          id: 'projects',
-          icon: '📁',
-          title: 'Projects',
-          subtitle: 'Manage websites',
-          color: 'from-indigo-500 to-indigo-600',
-          page: 'projects'
-        }
-      );
+  // Quick action cards - all features free
+  const quickActions = [
+    {
+      id: 'seo-checker',
+      icon: '🔍',
+      title: 'SEO Analyzer',
+      subtitle: 'Scan any website',
+      color: 'from-blue-500 to-blue-600',
+      page: 'seo-checker'
+    },
+    {
+      id: 'ai-generator',
+      icon: '✨',
+      title: 'AI Writer',
+      subtitle: 'Generate content',
+      color: 'from-purple-500 to-purple-600',
+      page: 'ai-generator'
+    },
+    {
+      id: 'keywords',
+      icon: '🎯',
+      title: 'Keywords',
+      subtitle: 'Find opportunities',
+      color: 'from-green-500 to-green-600',
+      page: 'keywords'
+    },
+    {
+      id: 'speed',
+      icon: '⚡',
+      title: 'Speed Test',
+      subtitle: 'Check performance',
+      color: 'from-yellow-500 to-yellow-600',
+      page: 'performance'
+    },
+    {
+      id: 'learn',
+      icon: '📚',
+      title: 'Learn SEO',
+      subtitle: 'Master the basics',
+      color: 'from-orange-500 to-orange-600',
+      page: 'learn'
+    },
+    {
+      id: 'projects',
+      icon: '📁',
+      title: 'Projects',
+      subtitle: 'Manage websites',
+      color: 'from-indigo-500 to-indigo-600',
+      page: 'projects'
+    },
+    {
+      id: 'reports',
+      icon: '📊',
+      title: 'Reports',
+      subtitle: 'Generate PDFs',
+      color: 'from-teal-500 to-teal-600',
+      page: 'reports'
+    },
+    {
+      id: 'proposals',
+      icon: '📄',
+      title: 'Proposals',
+      subtitle: 'Win clients',
+      color: 'from-pink-500 to-pink-600',
+      page: 'proposals'
     }
+  ];
 
-    if (userMode === 'agency') {
-      baseActions.push(
-        {
-          id: 'clients',
-          icon: '👥',
-          title: 'Clients',
-          subtitle: 'Manage accounts',
-          color: 'from-pink-500 to-pink-600',
-          page: 'clients'
-        },
-        {
-          id: 'reports',
-          icon: '📊',
-          title: 'Reports',
-          subtitle: 'Generate PDFs',
-          color: 'from-teal-500 to-teal-600',
-          page: 'reports'
-        }
-      );
-    }
-
-    return baseActions;
-  };
-
-  // Stats based on mode
-  const getStats = () => {
-    if (userMode === 'agency') {
-      return [
-        { label: 'Active Clients', value: '12', icon: '👥', trend: '+3 this month' },
-        { label: 'Projects', value: '28', icon: '📁', trend: '5 in progress' },
-        { label: 'Reports Sent', value: '45', icon: '📊', trend: '8 this week' },
-        { label: 'Revenue', value: '$4.2K', icon: '💰', trend: '+15% growth' }
-      ];
-    } else if (userMode === 'pro') {
-      return [
-        { label: 'Sites Analyzed', value: '24', icon: '🔍', trend: '+5 this week' },
-        { label: 'Projects', value: '8', icon: '📁', trend: '3 active' },
-        { label: 'Keywords Found', value: '156', icon: '🎯', trend: '42 ranking' },
-        { label: 'Avg Score', value: '78', icon: '📈', trend: '+12 points' }
-      ];
-    }
-    return [
-      { label: 'Sites Checked', value: '5', icon: '🔍', trend: 'Keep going!' },
-      { label: 'Lessons Done', value: '3', icon: '📚', trend: '12 remaining' },
-      { label: 'AI Generates', value: '8', icon: '✨', trend: 'Great work!' },
-      { label: 'Your Score', value: '65', icon: '⭐', trend: 'Improving!' }
-    ];
-  };
-
-  const quickActions = getQuickActions();
-  const stats = getStats();
+  // Stats - all features free
+  const stats = [
+    { label: 'Sites Analyzed', value: '24', icon: '🔍', trend: '+5 this week' },
+    { label: 'Projects', value: '8', icon: '📁', trend: '3 active' },
+    { label: 'Reports', value: '12', icon: '📊', trend: '+4 this month' },
+    { label: 'Avg Score', value: '78', icon: '📈', trend: '+12 points' }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -135,10 +99,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         
         <div className="relative px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Mode Badge */}
+            {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm font-medium mb-4">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-              {userMode === 'agency' ? '🏢 Agency Mode' : userMode === 'pro' ? '⚡ Pro Mode' : '🌱 Beginner Mode'}
+              ✨ All Features Free
             </div>
             
             {/* Greeting */}
@@ -238,27 +202,30 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
           
-          {/* Recent Activity / Tips */}
+          {/* Popular Tools */}
           <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
             <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <span>💡</span>
-              <span>Quick Tips</span>
+              <span>🔥</span>
+              <span>Popular Tools</span>
             </h3>
             
             <div className="space-y-3">
               {[
-                { tip: 'Check your site speed regularly', icon: '⚡', action: 'speed' },
-                { tip: 'Use AI to generate meta descriptions', icon: '✨', action: 'ai-generator' },
-                { tip: 'Research keywords before writing', icon: '🎯', action: 'keywords' },
-                { tip: 'Learn SEO basics to rank higher', icon: '📚', action: 'learn' }
+                { name: 'SEO Analyzer', desc: 'Complete website audit', icon: '🔍', action: 'seo-checker' },
+                { name: 'AI Content Writer', desc: 'Generate optimized content', icon: '✨', action: 'ai-generator' },
+                { name: 'Keyword Research', desc: 'Find ranking opportunities', icon: '🎯', action: 'keywords' },
+                { name: 'Speed Test', desc: 'Check page performance', icon: '⚡', action: 'performance' }
               ].map((item, i) => (
                 <button
                   key={i}
                   onClick={() => onNavigate(item.action)}
                   className="w-full flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left group"
                 >
-                  <span className="text-lg">{item.icon}</span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300 flex-1">{item.tip}</span>
+                  <span className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-lg">{item.icon}</span>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">{item.name}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">{item.desc}</div>
+                  </div>
                   <span className="text-gray-400 group-hover:translate-x-1 transition-transform">→</span>
                 </button>
               ))}
@@ -304,31 +271,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
           </div>
         </div>
-
-        {/* Mode Upgrade Banner - Only for non-agency */}
-        {userMode !== 'agency' && (
-          <div className="mt-6 sm:mt-8 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h3 className="font-bold text-base sm:text-lg flex items-center gap-2">
-                  <span>🚀</span>
-                  <span>Unlock More Features</span>
-                </h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  {userMode === 'beginner' 
-                    ? 'Upgrade to Pro for advanced tools and project management.'
-                    : 'Upgrade to Agency for client management and team features.'}
-                </p>
-              </div>
-              <button
-                onClick={() => onNavigate('mode-settings')}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity whitespace-nowrap"
-              >
-                Upgrade Now →
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Footer Note */}
         <div className="mt-8 text-center">
