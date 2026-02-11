@@ -17,7 +17,7 @@ export function Header({ onMenuToggle, isMobileMenuOpen }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 h-16">
       <div className="w-full px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Left side - Menu button and Logo */}

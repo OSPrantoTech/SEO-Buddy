@@ -10,7 +10,7 @@ import {
   Search, Sparkles, Hash, Zap, BookOpen, Home, Code2, FolderOpen, 
   GraduationCap, FileText, DollarSign, FileBarChart, Link, Eye,
   FileCode, Bot, Map, BarChart3, Tag, BookOpenCheck, Image, RefreshCw,
-  FileEdit, Languages, CheckSquare, Target, QrCode, Clock, Braces
+  FileEdit, Languages, CheckSquare, Target, QrCode, Clock, Braces, Bug
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -195,6 +195,13 @@ const allNavItems = [
     color: 'text-yellow-500',
     section: 'advanced'
   },
+  {
+    id: 'code-error-finder',
+    label: 'Code Error Finder',
+    icon: Bug,
+    color: 'text-red-500',
+    section: 'advanced'
+  },
   // Learning
   {
     id: 'learning',
@@ -317,14 +324,14 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Fixed on PC, slides in on mobile */}
       <aside
         className={cn(
-          'fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-56 z-50',
+          'fixed top-16 left-0 h-[calc(100vh-4rem)] w-56 z-40',
           'bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700',
           'transform transition-transform duration-300 ease-in-out',
           'lg:translate-x-0 flex-shrink-0',
-          'overscroll-contain',
+          'overscroll-contain shadow-lg lg:shadow-none',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -335,7 +342,7 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
               <span className="text-lg">🎉</span>
               <div>
                 <div className="text-xs font-semibold text-green-700 dark:text-green-300">All Features FREE</div>
-                <div className="text-xs text-green-600 dark:text-green-400">35+ SEO Tools</div>
+                <div className="text-xs text-green-600 dark:text-green-400">40+ SEO Tools</div>
               </div>
             </div>
           </div>

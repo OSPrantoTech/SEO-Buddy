@@ -54,6 +54,7 @@ import { SEOAuditChecklist } from './components/features/SEOAuditChecklist';
 import { LongTailKeywords } from './components/features/LongTailKeywords';
 import { QRCodeGenerator } from './components/features/QRCodeGenerator';
 import { JsonCreator } from './components/features/JsonCreator';
+import { CodeErrorFinder } from './components/features/CodeErrorFinder';
 
 // Business Tools
 import { ReportGenerator } from './components/features/ReportGenerator';
@@ -168,6 +169,8 @@ export function App() {
         return <QRCodeGenerator />;
       case 'json-creator':
         return <JsonCreator />;
+      case 'code-error-finder':
+        return <CodeErrorFinder />;
       
       // Learning
       case 'learn':
@@ -208,12 +211,15 @@ export function App() {
         />
 
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+          {/* Fixed Header */}
           <Header 
             onMenuToggle={toggleMobileMenu} 
             isMobileMenuOpen={isMobileMenuOpen}
           />
 
-          <div className="flex min-h-[calc(100vh-4rem)]">
+          {/* Main Layout - Sidebar fixed on PC */}
+          <div className="flex pt-16">
+            {/* Fixed Sidebar */}
             <Sidebar
               activeTab={activeTab}
               onTabChange={handleTabChange}
@@ -221,8 +227,9 @@ export function App() {
               onMobileClose={closeMobileMenu}
             />
 
-            <main className="flex-1 w-full min-w-0 flex flex-col">
-              <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+            {/* Main Content - with left margin for fixed sidebar on PC */}
+            <main className="flex-1 w-full min-w-0 flex flex-col lg:ml-56">
+              <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 min-h-[calc(100vh-4rem)]">
                 {renderContent()}
               </div>
               <Footer />

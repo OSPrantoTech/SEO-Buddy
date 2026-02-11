@@ -272,12 +272,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Footer Note */}
-        <div className="mt-8 text-center">
-          <p className="text-xs text-gray-400 dark:text-gray-500">
-            Made with ❤️ by OSPranto Tech • Your SEO success is our mission
-          </p>
-        </div>
       </div>
     </div>
   );

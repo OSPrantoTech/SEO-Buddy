@@ -1,122 +1,92 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Card } from '../ui/Card';
 
 export function QRCodeGenerator() {
   const [url, setUrl] = useState('https://example.com');
   const [size, setSize] = useState(200);
-  const [bgColor, setBgColor] = useState('#ffffff');
-  const [fgColor, setFgColor] = useState('#000000');
   const [copied, setCopied] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M');
 
-  // Simple QR Code generator using canvas
-  const generateQRCode = () => {
-    if (!canvasRef.current || !url) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Use a simple visual representation (actual QR would need a library)
-    canvas.width = size;
-    canvas.height = size;
-
-    // Background
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, size, size);
-
-    // Create a pattern that looks like QR code
-    const moduleSize = Math.floor(size / 25);
-    ctx.fillStyle = fgColor;
-
-    // Generate pseudo-random pattern based on URL
-    const seed = url.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-    
-    // Position patterns (corners)
-    const drawPositionPattern = (x: number, y: number) => {
-      const s = moduleSize * 7;
-      ctx.fillRect(x, y, s, s);
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(x + moduleSize, y + moduleSize, s - moduleSize * 2, s - moduleSize * 2);
-      ctx.fillStyle = fgColor;
-      ctx.fillRect(x + moduleSize * 2, y + moduleSize * 2, s - moduleSize * 4, s - moduleSize * 4);
-    };
-
-    drawPositionPattern(moduleSize, moduleSize);
-    drawPositionPattern(size - moduleSize * 8, moduleSize);
-    drawPositionPattern(moduleSize, size - moduleSize * 8);
-
-    // Data modules (simplified pattern)
-    for (let i = 9; i < 24; i++) {
-      for (let j = 9; j < 24; j++) {
-        const val = (seed * i * j) % 7;
-        if (val < 3) {
-          ctx.fillRect(
-            i * moduleSize,
-            j * moduleSize,
-            moduleSize - 1,
-            moduleSize - 1
-          );
-        }
-      }
-    }
-
-    // Timing patterns
-    for (let i = 8; i < 24; i += 2) {
-      ctx.fillRect(6 * moduleSize, i * moduleSize, moduleSize, moduleSize);
-      ctx.fillRect(i * moduleSize, 6 * moduleSize, moduleSize, moduleSize);
-    }
+  // Generate QR Code URL using Google Charts API
+  const getQRCodeUrl = () => {
+    const encodedUrl = encodeURIComponent(url);
+    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedUrl}&ecc=${errorLevel}`;
   };
 
-  useEffect(() => {
-    generateQRCode();
-  }, [url, size, bgColor, fgColor]);
-
-  const downloadQR = () => {
-    if (!canvasRef.current) return;
-    const link = document.createElement('a');
-    link.download = 'qrcode.png';
-    link.href = canvasRef.current.toDataURL('image/png');
-    link.click();
+  // Alternative Google Charts API
+  const getGoogleQRUrl = () => {
+    const encodedUrl = encodeURIComponent(url);
+    return `https://chart.googleapis.com/chart?cht=qr&chs=${size}x${size}&chl=${encodedUrl}&chld=${errorLevel}`;
   };
 
-  const copyQR = async () => {
-    if (!canvasRef.current) return;
+  const [useGoogleApi, setUseGoogleApi] = useState(false);
+  const qrCodeUrl = useGoogleApi ? getGoogleQRUrl() : getQRCodeUrl();
+
+  const downloadQR = async () => {
     try {
-      const blob = await new Promise<Blob>((resolve) => {
-        canvasRef.current?.toBlob((blob) => {
-          if (blob) resolve(blob);
-        }, 'image/png');
-      });
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ]);
+      const response = await fetch(qrCodeUrl);
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `qrcode-${size}x${size}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    } catch {
+      // Fallback: open in new tab
+      window.open(qrCodeUrl, '_blank');
+    }
+  };
+
+  const copyQRUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(qrCodeUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback - copy URL instead
-      navigator.clipboard.writeText(url);
+      // Fallback
+      const textArea = document.createElement('textarea');
+      textArea.value = qrCodeUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  const presetColors = [
-    { bg: '#ffffff', fg: '#000000', name: 'Classic' },
-    { bg: '#1a1a2e', fg: '#eaeaea', name: 'Dark' },
-    { bg: '#f8f9fa', fg: '#0d6efd', name: 'Blue' },
-    { bg: '#d4edda', fg: '#155724', name: 'Green' },
-    { bg: '#fff3cd', fg: '#856404', name: 'Yellow' },
-    { bg: '#f8d7da', fg: '#721c24', name: 'Red' },
+  const presetSizes = [
+    { size: 100, label: 'Small' },
+    { size: 200, label: 'Medium' },
+    { size: 300, label: 'Large' },
+    { size: 400, label: 'X-Large' },
+  ];
+
+  const errorLevels = [
+    { level: 'L' as const, label: 'Low (7%)', desc: 'Small file size' },
+    { level: 'M' as const, label: 'Medium (15%)', desc: 'Recommended' },
+    { level: 'Q' as const, label: 'High (25%)', desc: 'Better recovery' },
+    { level: 'H' as const, label: 'Highest (30%)', desc: 'Best for logos' },
+  ];
+
+  const quickLinks = [
+    { label: 'Website', prefix: 'https://', placeholder: 'example.com' },
+    { label: 'Email', prefix: 'mailto:', placeholder: 'email@example.com' },
+    { label: 'Phone', prefix: 'tel:', placeholder: '+8801700000000' },
+    { label: 'SMS', prefix: 'sms:', placeholder: '+8801700000000' },
+    { label: 'WhatsApp', prefix: 'https://wa.me/', placeholder: '8801700000000' },
+    { label: 'WiFi', prefix: 'WIFI:T:WPA;S:', placeholder: 'NetworkName;P:Password;;' },
   ];
 
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
         <h1 className="text-xl sm:text-2xl font-bold mb-2">📱 QR Code Generator</h1>
-        <p className="text-gray-300 text-sm sm:text-base">
-          যেকোনো URL এর জন্য QR code তৈরি করুন - marketing materials এ ব্যবহার করুন
+        <p className="text-purple-100 text-sm sm:text-base">
+          যেকোনো URL, Phone, Email, WhatsApp এর জন্য scannable QR code তৈরি করুন
         </p>
       </div>
 
@@ -124,101 +94,101 @@ export function QRCodeGenerator() {
         {/* Input Section */}
         <div className="space-y-4">
           <Card className="p-4 sm:p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🔗 Enter URL</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🔗 Enter Content</h3>
             
+            {/* Quick Type Buttons */}
+            <div className="mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Quick type:</p>
+              <div className="flex flex-wrap gap-2">
+                {quickLinks.map((link) => (
+                  <button
+                    key={link.label}
+                    onClick={() => setUrl(link.prefix + link.placeholder)}
+                    className="px-3 py-1.5 text-xs sm:text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    {link.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <input
-              type="url"
+              type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://your-website.com"
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm sm:text-base focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              placeholder="Enter URL, phone, email, or text"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm sm:text-base focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
 
-            {/* Size Slider */}
+            {/* Size Selection */}
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Size: {size}px
+                📐 Size: {size}x{size} px
               </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {presetSizes.map((preset) => (
+                  <button
+                    key={preset.size}
+                    onClick={() => setSize(preset.size)}
+                    className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                      size === preset.size
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
               <input
                 type="range"
                 min="100"
-                max="400"
+                max="500"
+                step="50"
                 value={size}
                 onChange={(e) => setSize(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600"
               />
             </div>
 
-            {/* Color Pickers */}
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Background Color
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="color"
-                    value={bgColor}
-                    onChange={(e) => setBgColor(e.target.value)}
-                    className="w-10 h-10 rounded cursor-pointer"
-                  />
-                  <input
-                    type="text"
-                    value={bgColor}
-                    onChange={(e) => setBgColor(e.target.value)}
-                    className="flex-1 p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Foreground Color
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="color"
-                    value={fgColor}
-                    onChange={(e) => setFgColor(e.target.value)}
-                    className="w-10 h-10 rounded cursor-pointer"
-                  />
-                  <input
-                    type="text"
-                    value={fgColor}
-                    onChange={(e) => setFgColor(e.target.value)}
-                    className="flex-1 p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  />
-                </div>
+            {/* Error Correction Level */}
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                🛡️ Error Correction Level
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {errorLevels.map((item) => (
+                  <button
+                    key={item.level}
+                    onClick={() => setErrorLevel(item.level)}
+                    className={`p-2 text-left rounded-lg border-2 transition-colors ${
+                      errorLevel === item.level
+                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                    }`}
+                  >
+                    <p className={`text-sm font-medium ${errorLevel === item.level ? 'text-purple-700 dark:text-purple-300' : 'text-gray-700 dark:text-gray-300'}`}>
+                      {item.label}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.desc}</p>
+                  </button>
+                ))}
               </div>
             </div>
-          </Card>
 
-          {/* Color Presets */}
-          <Card className="p-4 sm:p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🎨 Color Presets</h3>
-            
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-              {presetColors.map((preset, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setBgColor(preset.bg);
-                    setFgColor(preset.fg);
-                  }}
-                  className="p-2 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-400 transition-colors"
-                >
-                  <div 
-                    className="w-full h-8 rounded flex items-center justify-center"
-                    style={{ backgroundColor: preset.bg }}
-                  >
-                    <div 
-                      className="w-4 h-4 rounded"
-                      style={{ backgroundColor: preset.fg }}
-                    />
-                  </div>
-                  <p className="text-xs text-center mt-1 text-gray-600 dark:text-gray-400">{preset.name}</p>
-                </button>
-              ))}
+            {/* API Selection */}
+            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useGoogleApi}
+                  onChange={(e) => setUseGoogleApi(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Use Google Charts API (alternative)
+                </span>
+              </label>
             </div>
           </Card>
         </div>
@@ -228,56 +198,142 @@ export function QRCodeGenerator() {
           <Card className="p-4 sm:p-6">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-4">👁️ Preview</h3>
             
-            <div className="flex justify-center p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-              <canvas
-                ref={canvasRef}
-                width={size}
-                height={size}
-                className="rounded shadow-lg"
-                style={{ maxWidth: '100%', height: 'auto' }}
-              />
+            <div className="flex justify-center p-6 bg-white dark:bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-400">
+              {url ? (
+                <img
+                  src={qrCodeUrl}
+                  alt="QR Code"
+                  className="max-w-full h-auto rounded shadow-lg"
+                  style={{ maxWidth: size, maxHeight: size }}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://chart.googleapis.com/chart?cht=qr&chs=${size}x${size}&chl=${encodeURIComponent(url)}`;
+                  }}
+                />
+              ) : (
+                <div className="text-center text-gray-500 py-12">
+                  <p className="text-4xl mb-2">📱</p>
+                  <p>Enter a URL to generate QR code</p>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2 mt-4">
               <button
                 onClick={downloadQR}
-                className="flex-1 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors flex items-center justify-center gap-2"
+                disabled={!url}
+                className="flex-1 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
                 📥 Download PNG
               </button>
               <button
-                onClick={copyQR}
-                className="flex-1 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                onClick={copyQRUrl}
+                disabled={!url}
+                className="flex-1 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
-                {copied ? '✅ Copied!' : '📋 Copy Image'}
+                {copied ? '✅ Copied!' : '📋 Copy URL'}
               </button>
             </div>
+
+            {/* Direct Image URL */}
+            {url && (
+              <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Direct Image URL:</p>
+                <input
+                  type="text"
+                  value={qrCodeUrl}
+                  readOnly
+                  className="w-full p-2 text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-600 dark:text-gray-300"
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                />
+              </div>
+            )}
           </Card>
 
+          {/* HTML Embed Code */}
+          {url && (
+            <Card className="p-4 sm:p-6">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-3">📝 Embed Code</h3>
+              <div className="bg-gray-900 rounded-lg p-3 overflow-x-auto">
+                <code className="text-green-400 text-xs sm:text-sm whitespace-pre-wrap break-all">
+                  {`<img src="${qrCodeUrl}" alt="QR Code" width="${size}" height="${size}" />`}
+                </code>
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`<img src="${qrCodeUrl}" alt="QR Code" width="${size}" height="${size}" />`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className="mt-2 text-sm text-purple-600 dark:text-purple-400 hover:underline"
+              >
+                📋 Copy HTML
+              </button>
+            </Card>
+          )}
+
           {/* Use Cases */}
-          <Card className="p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50">
+          <Card className="p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
             <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">📌 QR Code ব্যবহার করুন</h3>
-            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-              <li>• <strong>Business Cards:</strong> Website link শেয়ার করুন</li>
-              <li>• <strong>Flyers & Posters:</strong> Campaign landing page</li>
-              <li>• <strong>Product Packaging:</strong> Product details page</li>
-              <li>• <strong>Restaurant Menus:</strong> Digital menu link</li>
-              <li>• <strong>Event Tickets:</strong> Event registration</li>
-              <li>• <strong>Social Media:</strong> Profile link শেয়ার করুন</li>
-            </ul>
+            <div className="grid grid-cols-2 gap-2 text-sm text-gray-700 dark:text-gray-300">
+              <div className="flex items-start gap-2">
+                <span>💼</span>
+                <span>Business Cards</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>📋</span>
+                <span>Flyers & Posters</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>📦</span>
+                <span>Product Packaging</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>🍽️</span>
+                <span>Restaurant Menus</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>🎟️</span>
+                <span>Event Tickets</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>📱</span>
+                <span>App Downloads</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>💳</span>
+                <span>Payment Links</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span>📧</span>
+                <span>Email Signatures</span>
+              </div>
+            </div>
           </Card>
         </div>
       </div>
 
-      {/* Note */}
-      <Card className="p-4 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
-        <p className="text-sm text-amber-700 dark:text-amber-300">
-          <strong>💡 Note:</strong> এটি একটি visual representation। Production use এর জন্য actual QR code library ব্যবহার করুন। 
-          Google Charts API দিয়েও QR code generate করতে পারেন: 
-          <code className="ml-1 px-1 bg-amber-100 dark:bg-amber-900/50 rounded">
-            https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=YOUR_URL
-          </code>
-        </p>
+      {/* SEO Tips */}
+      <Card className="p-4 sm:p-6">
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">💡 QR Code Best Practices</h3>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+            <p className="font-medium text-green-800 dark:text-green-300 mb-1">✅ Test First</p>
+            <p className="text-sm text-green-700 dark:text-green-400">Print করার আগে scan করে দেখুন</p>
+          </div>
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <p className="font-medium text-blue-800 dark:text-blue-300 mb-1">📐 Right Size</p>
+            <p className="text-sm text-blue-700 dark:text-blue-400">Print size কমপক্ষে 2x2 cm রাখুন</p>
+          </div>
+          <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+            <p className="font-medium text-purple-800 dark:text-purple-300 mb-1">🎨 Good Contrast</p>
+            <p className="text-sm text-purple-700 dark:text-purple-400">Dark foreground, light background</p>
+          </div>
+          <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+            <p className="font-medium text-orange-800 dark:text-orange-300 mb-1">🔗 Short URLs</p>
+            <p className="text-sm text-orange-700 dark:text-orange-400">Short URLs = simpler QR codes</p>
+          </div>
+        </div>
       </Card>
     </div>
   );
