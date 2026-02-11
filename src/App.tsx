@@ -55,6 +55,25 @@ import { LongTailKeywords } from './components/features/LongTailKeywords';
 import { QRCodeGenerator } from './components/features/QRCodeGenerator';
 import { JsonCreator } from './components/features/JsonCreator';
 import { CodeErrorFinder } from './components/features/CodeErrorFinder';
+import { ProjectAnalyzer } from './components/features/ProjectAnalyzer';
+import AiCodeGenerator from './components/features/AiCodeGenerator';
+import AIDebugSuite from './components/features/AIDebugSuite';
+
+// Developer Tools
+import ColorPicker from './components/features/ColorPicker';
+import JsonFormatter from './components/features/JsonFormatter';
+import JsonToGo from './components/features/JsonToGo';
+import Base64Converter from './components/features/Base64Converter';
+import JwtDecoder from './components/features/JwtDecoder';
+import PasswordGenerator from './components/features/PasswordGenerator';
+import HashGenerator from './components/features/HashGenerator';
+import UrlCleaner from './components/features/UrlCleaner';
+import XmlFormatter from './components/features/XmlFormatter';
+import MarkdownFormatter from './components/features/MarkdownFormatter';
+import SqlFormatter from './components/features/SqlFormatter';
+import FaviconGenerator from './components/features/FaviconGenerator';
+import BarcodeGenerator from './components/features/BarcodeGenerator';
+import DeveloperTools from './components/features/DeveloperTools';
 
 // Business Tools
 import { ReportGenerator } from './components/features/ReportGenerator';
@@ -171,6 +190,12 @@ export function App() {
         return <JsonCreator />;
       case 'code-error-finder':
         return <CodeErrorFinder />;
+      case 'project-analyzer':
+        return <ProjectAnalyzer />;
+      case 'ai-code-generator':
+        return <AiCodeGenerator />;
+      case 'ai-debug-suite':
+        return <AIDebugSuite />;
       
       // Learning
       case 'learn':
@@ -187,6 +212,36 @@ export function App() {
         return <ProposalGenerator />;
       case 'pricing':
         return <PricingCalculator />;
+      
+      // Developer Tools
+      case 'color-picker':
+        return <ColorPicker />;
+      case 'json-formatter':
+        return <JsonFormatter />;
+      case 'json-to-go':
+        return <JsonToGo />;
+      case 'base64':
+        return <Base64Converter />;
+      case 'jwt-decoder':
+        return <JwtDecoder />;
+      case 'password-generator':
+        return <PasswordGenerator />;
+      case 'hash-generator':
+        return <HashGenerator />;
+      case 'url-cleaner':
+        return <UrlCleaner />;
+      case 'xml-formatter':
+        return <XmlFormatter />;
+      case 'markdown-formatter':
+        return <MarkdownFormatter />;
+      case 'sql-formatter':
+        return <SqlFormatter />;
+      case 'favicon-generator':
+        return <FaviconGenerator />;
+      case 'barcode-generator':
+        return <BarcodeGenerator />;
+      case 'developer-tools':
+        return <DeveloperTools />;
       
       // Settings
       case 'about':

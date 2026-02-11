@@ -10,7 +10,9 @@ import {
   Search, Sparkles, Hash, Zap, BookOpen, Home, Code2, FolderOpen, 
   GraduationCap, FileText, DollarSign, FileBarChart, Link, Eye,
   FileCode, Bot, Map, BarChart3, Tag, BookOpenCheck, Image, RefreshCw,
-  FileEdit, Languages, CheckSquare, Target, QrCode, Clock, Braces, Bug
+  FileEdit, Languages, CheckSquare, Target, QrCode, Clock, Braces, Bug,
+  FolderArchive, Palette, FileJson, Binary, Key, Lock, Database, Wrench,
+  Barcode, Link2, Wand2
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -202,6 +204,126 @@ const allNavItems = [
     color: 'text-red-500',
     section: 'advanced'
   },
+  {
+    id: 'project-analyzer',
+    label: 'Project Analyzer',
+    icon: FolderArchive,
+    color: 'text-blue-600',
+    section: 'advanced'
+  },
+  {
+    id: 'ai-code-generator',
+    label: 'AI Code Generator',
+    icon: Wand2,
+    color: 'text-purple-600',
+    section: 'advanced'
+  },
+  {
+    id: 'ai-debug-suite',
+    label: 'AI Debug Suite',
+    icon: Bug,
+    color: 'text-red-500',
+    section: 'advanced'
+  },
+  // Developer Tools
+  {
+    id: 'dev-tools',
+    label: 'Developer Tools',
+    icon: Wrench,
+    color: 'text-indigo-500',
+    section: 'devtools'
+  },
+  {
+    id: 'color-picker',
+    label: 'Color Picker',
+    icon: Palette,
+    color: 'text-pink-500',
+    section: 'devtools'
+  },
+  {
+    id: 'json-formatter',
+    label: 'JSON Formatter',
+    icon: FileJson,
+    color: 'text-yellow-500',
+    section: 'devtools'
+  },
+  {
+    id: 'json-to-go',
+    label: 'JSON to Go',
+    icon: FileCode,
+    color: 'text-cyan-500',
+    section: 'devtools'
+  },
+  {
+    id: 'base64',
+    label: 'Base64 Converter',
+    icon: Binary,
+    color: 'text-blue-500',
+    section: 'devtools'
+  },
+  {
+    id: 'jwt-decoder',
+    label: 'JWT Decoder',
+    icon: Key,
+    color: 'text-amber-500',
+    section: 'devtools'
+  },
+  {
+    id: 'password-generator',
+    label: 'Password Generator',
+    icon: Lock,
+    color: 'text-green-500',
+    section: 'devtools'
+  },
+  {
+    id: 'hash-generator',
+    label: 'Hash Generator',
+    icon: Hash,
+    color: 'text-violet-500',
+    section: 'devtools'
+  },
+  {
+    id: 'url-cleaner',
+    label: 'URL Cleaner',
+    icon: Link2,
+    color: 'text-teal-500',
+    section: 'devtools'
+  },
+  {
+    id: 'xml-formatter',
+    label: 'XML Formatter',
+    icon: FileCode,
+    color: 'text-orange-500',
+    section: 'devtools'
+  },
+  {
+    id: 'markdown-formatter',
+    label: 'Markdown Formatter',
+    icon: FileText,
+    color: 'text-gray-500',
+    section: 'devtools'
+  },
+  {
+    id: 'sql-formatter',
+    label: 'SQL Formatter',
+    icon: Database,
+    color: 'text-blue-600',
+    section: 'devtools'
+  },
+  {
+    id: 'favicon-generator',
+    label: 'Favicon Generator',
+    icon: Image,
+    color: 'text-pink-500',
+    section: 'devtools'
+  },
+  {
+    id: 'barcode-generator',
+    label: 'Barcode Generator',
+    icon: Barcode,
+    color: 'text-gray-700',
+    section: 'devtools'
+  },
   // Learning
   {
     id: 'learning',
@@ -342,7 +464,7 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
               <span className="text-lg">🎉</span>
               <div>
                 <div className="text-xs font-semibold text-green-700 dark:text-green-300">All Features FREE</div>
-                <div className="text-xs text-green-600 dark:text-green-400">40+ SEO Tools</div>
+                <div className="text-xs text-green-600 dark:text-green-400">65+ SEO & Dev Tools</div>
               </div>
             </div>
           </div>
@@ -351,6 +473,7 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
           {renderSection('seo', 'SEO Tools')}
           {renderSection('content', 'Content Tools')}
           {renderSection('advanced', 'Advanced SEO')}
+          {renderSection('devtools', 'Developer Tools')}
           {renderSection('learn', 'Learning')}
           {renderSection('business', 'Business')}
           {renderSection('settings', 'Settings')}
