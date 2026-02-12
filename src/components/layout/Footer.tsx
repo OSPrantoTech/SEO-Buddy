@@ -45,7 +45,7 @@ export function Footer() {
             {/* Contact Links */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
               <a 
-                href="https://www.OSPranto.pro" 
+                href="https://www.OSPranto.pro.bd" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
