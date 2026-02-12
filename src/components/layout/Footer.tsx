@@ -51,7 +51,7 @@ export function Footer() {
                 className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
               >
                 <Globe className="w-4 h-4 text-green-400" />
-                <span>www.OSPranto.pro</span>
+                <span>www.OSPranto.pro.bd</span>
               </a>
               <span className="hidden sm:inline text-gray-600">|</span>
               <a 
