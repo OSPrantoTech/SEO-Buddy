@@ -203,7 +203,7 @@ export function Developer() {
                 className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
               >
                 <Globe className="w-4 h-4 text-green-400" />
-                www.OSPranto.pro
+                www.OSPranto.pro.bd
               </a>
               <a 
                 href="mailto:OSPranto.Official@gmail.com"
