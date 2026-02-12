@@ -58,6 +58,7 @@ import { CodeErrorFinder } from './components/features/CodeErrorFinder';
 import { ProjectAnalyzer } from './components/features/ProjectAnalyzer';
 import AiCodeGenerator from './components/features/AiCodeGenerator';
 import AIDebugSuite from './components/features/AIDebugSuite';
+import AICodePlayground from './components/features/AICodePlayground';
 
 // Developer Tools
 import ColorPicker from './components/features/ColorPicker';
@@ -196,6 +197,8 @@ export function App() {
         return <AiCodeGenerator />;
       case 'ai-debug-suite':
         return <AIDebugSuite />;
+      case 'ai-playground':
+        return <AICodePlayground />;
       
       // Learning
       case 'learn':

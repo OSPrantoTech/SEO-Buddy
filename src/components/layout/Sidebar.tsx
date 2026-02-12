@@ -18,6 +18,35 @@ import { cn } from '../../utils/cn';
 
 // All navigation items - ALL FREE
 const allNavItems = [
+  // AI Tools - শুরুতে
+  {
+    id: 'ai-playground',
+    label: 'AI Code Playground',
+    icon: Sparkles,
+    color: 'text-pink-500',
+    section: 'ai'
+  },
+  {
+    id: 'ai-generator',
+    label: 'AI Content Generator',
+    icon: Wand2,
+    color: 'text-purple-500',
+    section: 'ai'
+  },
+  {
+    id: 'ai-code-generator',
+    label: 'AI Code Generator',
+    icon: Code2,
+    color: 'text-indigo-500',
+    section: 'ai'
+  },
+  {
+    id: 'ai-debug-suite',
+    label: 'AI Bug Fixer',
+    icon: Bug,
+    color: 'text-red-500',
+    section: 'ai'
+  },
   // Main Tools
   {
     id: 'home',
@@ -31,13 +60,6 @@ const allNavItems = [
     label: 'SEO Checker',
     icon: Search,
     color: 'text-indigo-500',
-    section: 'main'
-  },
-  {
-    id: 'ai-generator',
-    label: 'AI Generator',
-    icon: Sparkles,
-    color: 'text-purple-500',
     section: 'main'
   },
   {
@@ -211,20 +233,7 @@ const allNavItems = [
     color: 'text-blue-600',
     section: 'advanced'
   },
-  {
-    id: 'ai-code-generator',
-    label: 'AI Code Generator',
-    icon: Wand2,
-    color: 'text-purple-600',
-    section: 'advanced'
-  },
-  {
-    id: 'ai-debug-suite',
-    label: 'AI Debug Suite',
-    icon: Bug,
-    color: 'text-red-500',
-    section: 'advanced'
-  },
+  // AI tools moved to top
   // Developer Tools
   {
     id: 'dev-tools',
@@ -469,6 +478,7 @@ export function Sidebar({ activeTab, onTabChange, isMobileOpen, onMobileClose }:
             </div>
           </div>
 
+          {renderSection('ai', '🤖 AI Tools')}
           {renderSection('main', 'Main Tools')}
           {renderSection('seo', 'SEO Tools')}
           {renderSection('content', 'Content Tools')}
